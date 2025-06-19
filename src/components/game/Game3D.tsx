@@ -47,23 +47,21 @@ const TowerMesh: React.FC<TowerMeshProps> = ({ tower, onClick, isSelected }) => 
       <Box
         args={[1, 0.5, 1]}
         position={[0, 0.25, 0]}
-      >
-        <meshStandardMaterial attach="material" color={getTowerColor(tower.type)} />
-      </Box>
+        material-color={getTowerColor(tower.type)}
+      />
       
       {/* Tower Top */}
       <Cone
         args={[0.8, 1, 8]}
         position={[0, 1, 0]}
-      >
-        <meshStandardMaterial attach="material" color={getTowerColor(tower.type)} />
-      </Cone>
+        material-color={getTowerColor(tower.type)}
+      />
 
       {/* Range Indicator when selected */}
       {isSelected && (
         <mesh position={[0, 0.1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[tower.range - 0.1, tower.range, 32]} />
-          <meshBasicMaterial attach="material" color="#00ff00" transparent opacity={0.3} />
+          <meshBasicMaterial color="#00ff00" transparent opacity={0.3} />
         </mesh>
       )}
 
@@ -113,21 +111,23 @@ const EnemyMesh: React.FC<EnemyMeshProps> = ({ enemy }) => {
       ref={meshRef}
       position={[enemy.position.x, enemy.position.y, enemy.position.z]}
     >
-      <Sphere args={[getEnemySize(enemy.type)]}>
-        <meshStandardMaterial attach="material" color={getEnemyColor(enemy.type)} />
-      </Sphere>
+      <Sphere 
+        args={[getEnemySize(enemy.type)]}
+        material-color={getEnemyColor(enemy.type)}
+      />
       
       {/* Health Bar */}
       <group position={[0, 1, 0]}>
-        <Box args={[0.8, 0.1, 0.1]} position={[0, 0, 0]}>
-          <meshBasicMaterial attach="material" color="#333333" />
-        </Box>
+        <Box 
+          args={[0.8, 0.1, 0.1]} 
+          position={[0, 0, 0]}
+          material-color="#333333"
+        />
         <Box
           args={[(enemy.health / enemy.maxHealth) * 0.8, 0.08, 0.08]}
           position={[(-0.8 + (enemy.health / enemy.maxHealth) * 0.8) / 2, 0, 0.01]}
-        >
-          <meshBasicMaterial attach="material" color="#ff0000" />
-        </Box>
+          material-color="#ff0000"
+        />
       </group>
     </group>
   );
@@ -152,9 +152,8 @@ const GamePath: React.FC = () => {
           key={index}
           args={[0.8, 0.1, 0.8]}
           position={[point.x, point.y, point.z]}
-        >
-          <meshStandardMaterial attach="material" color="#8B4513" />
-        </Box>
+          material-color="#8B4513"
+        />
       ))}
     </group>
   );
@@ -174,7 +173,6 @@ const TowerSlot: React.FC<TowerSlotProps> = ({ position, isOccupied, onClick }) 
       onClick={onClick}
     >
       <meshStandardMaterial 
-        attach="material"
         color={isOccupied ? "#654321" : "#90EE90"} 
         transparent 
         opacity={isOccupied ? 0.3 : 0.7} 
@@ -248,9 +246,12 @@ export const Game3D: React.FC<Game3DProps> = ({
       />
 
       {/* Ground */}
-      <Box args={[20, 0.1, 20]} position={[0, -0.05, 0]} receiveShadow>
-        <meshStandardMaterial attach="material" color="#228B22" />
-      </Box>
+      <Box 
+        args={[20, 0.1, 20]} 
+        position={[0, -0.05, 0]} 
+        receiveShadow
+        material-color="#228B22"
+      />
 
       {/* Game Path */}
       <GamePath />
