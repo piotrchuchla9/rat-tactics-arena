@@ -1,10 +1,6 @@
 
-import * as fs from 'fs';
-import * as path from 'path';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../types/game';
-
-const DB_PATH = path.join(process.cwd(), 'gamedata.json');
 
 interface DatabaseData {
   users: User[];
@@ -13,6 +9,7 @@ interface DatabaseData {
 
 class AuthDatabase {
   private data: DatabaseData;
+  private readonly STORAGE_KEY = 'rat-defense-gamedata';
 
   constructor() {
     this.loadData();
@@ -20,9 +17,9 @@ class AuthDatabase {
 
   private loadData(): void {
     try {
-      if (fs.existsSync(DB_PATH)) {
-        const fileContent = fs.readFileSync(DB_PATH, 'utf-8');
-        this.data = JSON.parse(fileContent);
+      const storedData = localStorage.getItem(this.STORAGE_KEY);
+      if (storedData) {
+        this.data = JSON.parse(storedData);
       } else {
         this.data = { users: [], nextUserId: 1 };
         this.saveData();
@@ -35,7 +32,7 @@ class AuthDatabase {
 
   private saveData(): void {
     try {
-      fs.writeFileSync(DB_PATH, JSON.stringify(this.data, null, 2));
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.data));
     } catch (error) {
       console.error('Error saving database:', error);
     }
